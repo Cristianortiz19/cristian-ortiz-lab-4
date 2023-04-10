@@ -1,31 +1,40 @@
 import "./card.js"
+
+let productData;
 async function getProducts() {
-    const products = {
-        method: "GET",
-        headers: {
-            "content-type": "application/json"
-        },
-    }
-    const APIproducts = await fetch("https://demo8088700.mockable.io/d1-products", products);
-    const data = await APIproducts.json();
-    console.log(data)
-    return data;
+    
+    await fetch("https://apimocha.com/d1-products/products")
+    .then(response => response.json())
+    .then(data => {
+        productData = data
+    })
+    return productData
 }
+
 const itemList = await getProducts();
 const productList = document.getElementById("product-cards")
+console.log(itemList)
 
 function showCard() {
     itemList.forEach(element => {
-        const component = document.createElement('d1-card');
-        component.setAttribute("name", element.name);
-        component.setAttribute("url", element.url);
-        component.setAttribute("description", element.description);
-        component.setAttribute("price", element.price);
-        component.setAttribute("category", element.category);
-        component.setAttribute("brand", element.brand);
-        component.setAttribute("size", element.size);
-        productList.append(component);
+        const component = document.createElement('d1_card');
+
+        component.innerHTML = `
+        <img src="${element.url}">
+        <h2>${element.name}</h2>
+        <p>${element.description}</p>
+        <h3>${element.size}</h3>
+        <h2>${element.price}</h2>
+        <h3>${element.brand}</h3>
+        <h3>${element.category}</h3>
+        `
+        productList.append(component)
     });
 }
 
-showCard();
+if(itemList !== undefined){
+    showCard();
+}
+
+
+//console.log(itemList)
